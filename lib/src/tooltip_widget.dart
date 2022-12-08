@@ -36,6 +36,7 @@ class ToolTipWidget extends StatefulWidget {
   final TextStyle? titleTextStyle;
   final TextStyle? descTextStyle;
   final Widget? container;
+  final Widget? tooltipExtendedContent;
   final Color? tooltipColor;
   final Color? textColor;
   final bool showArrow;
@@ -45,6 +46,7 @@ class ToolTipWidget extends StatefulWidget {
   final EdgeInsets? contentPadding;
   final Duration animationDuration;
   final bool disableAnimation;
+  final BorderRadius? borderRadius;
 
   ToolTipWidget({
     required this.position,
@@ -55,6 +57,7 @@ class ToolTipWidget extends StatefulWidget {
     required this.titleTextStyle,
     required this.descTextStyle,
     required this.container,
+    required this.tooltipExtendedContent,
     required this.tooltipColor,
     required this.textColor,
     required this.showArrow,
@@ -64,6 +67,7 @@ class ToolTipWidget extends StatefulWidget {
     required this.animationDuration,
     this.contentPadding = const EdgeInsets.symmetric(vertical: 8),
     required this.disableAnimation,
+    required this.borderRadius,
   });
 
   @override
@@ -115,11 +119,17 @@ class _ToolTipWidgetState extends State<ToolTipWidget>
         : _textSize(widget.title!, titleStyle).width +
             widget.contentPadding!.right +
             widget.contentPadding!.left;
-    final descriptionLength =
-        _textSize(widget.description!, descriptionStyle).width +
+    final descriptionLength = widget.description == null
+        ? 0
+        : _textSize(widget.description!, descriptionStyle).width +
             widget.contentPadding!.right +
             widget.contentPadding!.left;
     var maxTextWidth = max(titleLength, descriptionLength);
+    if (widget.tooltipExtendedContent != null) {
+      // if extended content is provided, just stretch the tooltip to fit
+      // to the screen
+      maxTextWidth = 99999;
+    }
     if (maxTextWidth > widget.screenSize!.width - 20) {
       return widget.screenSize!.width - 20;
     } else {
@@ -299,7 +309,8 @@ class _ToolTipWidgetState extends State<ToolTipWidget>
                         bottom: isArrowUp ? 0 : arrowHeight - 1,
                       ),
                       child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius:
+                            widget.borderRadius ?? BorderRadius.circular(8),
                         child: GestureDetector(
                           onTap: widget.onTooltipTap,
                           child: Container(
@@ -328,18 +339,33 @@ class _ToolTipWidgetState extends State<ToolTipWidget>
                                                     ),
                                           )
                                         : SizedBox(),
-                                    Text(
-                                      widget.description!,
-                                      style: widget.descTextStyle ??
-                                          Theme.of(context)
-                                              .textTheme
-                                              .subtitle2!
-                                              .merge(
-                                                TextStyle(
-                                                  color: widget.textColor,
+                                    if (widget.description != null)
+                                      Text(
+                                        widget.description!,
+                                        style: widget.descTextStyle ??
+                                            Theme.of(context)
+                                                .textTheme
+                                                .subtitle2!
+                                                .merge(
+                                                  TextStyle(
+                                                    color: widget.textColor,
+                                                  ),
                                                 ),
-                                              ),
-                                    ),
+                                      ),
+                                    if (widget.tooltipExtendedContent != null)
+                                      widget.tooltipExtendedContent!,
+                                    // Text(
+                                    //   "BABAAwB",
+                                    //   style: widget.descTextStyle ??
+                                    //       Theme.of(context)
+                                    //           .textTheme
+                                    //           .subtitle2!
+                                    //           .merge(
+                                    //             TextStyle(
+                                    //               color: widget.textColor,
+                                    //             ),
+                                    //           ),
+                                    // ),
                                   ],
                                 )
                               ],

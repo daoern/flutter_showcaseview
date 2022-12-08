@@ -48,6 +48,8 @@ class Showcase extends StatefulWidget {
   final Color overlayColor;
   final double overlayOpacity;
   final Widget? container;
+  final Widget? tooltipContent;
+  final BorderRadius? tooltipRadius;
   final Color showcaseBackgroundColor;
   final Color textColor;
   final Widget scrollLoadingWidget;
@@ -75,7 +77,7 @@ class Showcase extends StatefulWidget {
     required this.key,
     required this.child,
     this.title,
-    required this.description,
+    this.description,
     this.shapeBorder,
     this.overlayColor = Colors.black45,
     this.overlayOpacity = 0.75,
@@ -98,6 +100,8 @@ class Showcase extends StatefulWidget {
     this.radius,
     this.onTargetLongPress,
     this.onTargetDoubleTap,
+    this.tooltipContent,
+    this.tooltipRadius,
   })  : height = null,
         width = null,
         container = null,
@@ -142,6 +146,8 @@ class Showcase extends StatefulWidget {
     this.onTargetLongPress,
     this.onTargetDoubleTap,
   })  : showArrow = false,
+        tooltipContent = null,
+        tooltipRadius = null,
         onToolTipClick = null,
         assert(overlayOpacity >= 0.0 && overlayOpacity <= 1.0,
             "overlay opacity must be between 0 and 1.");
@@ -321,6 +327,7 @@ class _ShowcaseState extends State<Showcase> {
                   titleTextStyle: widget.titleTextStyle,
                   descTextStyle: widget.descTextStyle,
                   container: widget.container,
+                  tooltipExtendedContent: widget.tooltipContent,
                   tooltipColor: widget.showcaseBackgroundColor,
                   textColor: widget.textColor,
                   showArrow: widget.showArrow,
@@ -331,6 +338,7 @@ class _ShowcaseState extends State<Showcase> {
                   disableAnimation: widget.disableAnimation ??
                       showCaseWidgetState.disableAnimation,
                   animationDuration: widget.animationDuration,
+                  borderRadius: widget.tooltipRadius,
                 ),
             ],
           )
