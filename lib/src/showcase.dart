@@ -64,6 +64,7 @@ class Showcase extends StatefulWidget {
   final EdgeInsets overlayPadding;
   final VoidCallback? onTargetDoubleTap;
   final VoidCallback? onTargetLongPress;
+  final String? position;
 
   /// Defines blur value.
   /// This will blur the background while displaying showcase.
@@ -102,6 +103,7 @@ class Showcase extends StatefulWidget {
     this.onTargetDoubleTap,
     this.tooltipContent,
     this.tooltipRadius,
+    this.position,
   })  : height = null,
         width = null,
         container = null,
@@ -145,6 +147,7 @@ class Showcase extends StatefulWidget {
     this.blurValue,
     this.onTargetLongPress,
     this.onTargetDoubleTap,
+    this.position,
   })  : showArrow = false,
         tooltipContent = null,
         tooltipRadius = null,
@@ -339,6 +342,7 @@ class _ShowcaseState extends State<Showcase> {
                       showCaseWidgetState.disableAnimation,
                   animationDuration: widget.animationDuration,
                   borderRadius: widget.tooltipRadius,
+                  tooltipPosition: widget.position,
                 ),
             ],
           )
