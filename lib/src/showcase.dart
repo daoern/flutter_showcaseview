@@ -164,6 +164,7 @@ class _ShowcaseState extends State<Showcase> {
   bool _isScrollRunning = false;
   Timer? timer;
   GetPosition? position;
+
   ShowCaseWidgetState get showCaseWidgetState => ShowCaseWidget.of(context);
 
   @override
@@ -187,7 +188,10 @@ class _ShowcaseState extends State<Showcase> {
     });
 
     if (activeStep == widget.key) {
-      _scrollIntoView();
+      if (ShowCaseWidget.of(context).enableAutoScroll) {
+        _scrollIntoView();
+      }
+
       if (showCaseWidgetState.autoPlay) {
         timer = Timer(
             Duration(seconds: showCaseWidgetState.autoPlayDelay.inSeconds),
@@ -316,6 +320,7 @@ class _ShowcaseState extends State<Showcase> {
                   offset: offset,
                   size: size,
                   onTap: _getOnTargetTap,
+                  radius: widget.radius,
                   onDoubleTap: widget.onTargetDoubleTap,
                   onLongPress: widget.onTargetLongPress,
                   shapeBorder: widget.shapeBorder,
